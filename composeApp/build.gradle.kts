@@ -11,6 +11,7 @@ kotlin {
 
     sourceSets {
         val desktopMain by getting
+        val desktopTest by getting
 
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -22,9 +23,16 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
         }
+
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+        }
+
+        desktopTest.dependencies {
+            implementation(libs.junit)
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlin.test.junit)
         }
     }
 }
