@@ -1,0 +1,105 @@
+name: CI
+
+on:
+
+  # ブランチへのpush
+  push:
+    branches:
+      - master
+      - main
+      - develop
+    paths-ignore:
+      - "**.md"
+      - "LICENSE"
+
+  # プルリクエスト
+  pull_request:
+    branches:
+      - master
+      - main
+      - develop
+
+  # Workflow dispatch
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      # リポジトリのチェックアウト
+      - uses: actions/checkout@v3
+
+      # Gradleのキャッシュ
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # Javaセットアップ
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+
+      # ↓ 非プルリクエスト時のステップ ↓
+
+      # ビルド (非プルリクエスト時)
+      - name: Build
+        if: ${{ github.event_name != 'pull_request' }}
+        run: ./gradlew assemble
+
+      # テスト実行 (非プルリクエスト時)
+      - name: Test
+        if: ${{ github.event_name != 'pull_request' }}
+        run: ./gradlew allTests
+
+      # ktlint実行 (非プルリクエスト時)
+      - name: ktlint
+        if: ${{ github.event_name != 'pull_request' }}
+        run: ./gradlew ktlintCheck
+        continue-on-error: false
+
+      # ↑ 非プルリクエスト時のステップ ↑
+      # ↓ プルリクエスト時のステップ ↓
+
+      # ビルド (プルリクエスト時)
+      - name: Build (PR)
+        if: ${{ github.event_name == 'pull_request' }}
+        run: ./gradlew assemble
+
+      # テスト実行 (プルリクエスト時)
+      - name: Test (PR)
+        if: ${{ github.event_name == 'pull_request' }}
+        run: ./gradlew allTests
+
+      # ktlint実行・レポート出力 (プルリクエスト時)
+      - name: ktlint (PR)
+        if: ${{ github.event_name == 'pull_request' }}
+        run: ./gradlew ktlintCheck
+        continue-on-error: true
+
+      # Rubyセットアップ (プルリクエスト時)
+      - name: Setup Ruby
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      # Danger実行 (プルリクエスト時)
+      - name: Run Danger
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gem install bundler
+          bundle install
+          bundle exec danger
+
+      # ↑ プルリクエスト時のステップ ↑
