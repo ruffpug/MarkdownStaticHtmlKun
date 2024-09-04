@@ -11,6 +11,6 @@ internal class ExampleTest {
             return x + y
         }
 
-        assertEquals(expected = 3, actual = add(1, 2))
+        assertEquals(expected = 999, actual = add(1, 2))
     }
 }
