@@ -1,9 +1,9 @@
 package net.ruffpug.markdownstatichtmlkun
 
-class   Greeting {
+class Greeting {
     private val platform = getPlatform()
 
-     fun greet(): String{
+    fun greet(): String {
         return "Hello, ${platform.name}!"
     }
 }
