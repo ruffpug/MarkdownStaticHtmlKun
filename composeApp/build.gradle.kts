@@ -8,10 +8,10 @@ plugins {
 
 kotlin {
     jvm("desktop")
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -29,10 +29,9 @@ kotlin {
     }
 }
 
-
 compose.desktop {
     application {
-        mainClass = "net.ruffpug.markdownstatichtmlkun.MainKt"
+        mainClass = "net.ruffpug.markdownstatichtmlkun.MarkdownStaticHtmlKun"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
