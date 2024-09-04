@@ -1,8 +1,6 @@
 package net.ruffpug.markdownstatichtmlkun
 
-//  ↓ Kotlinの文法として正しくないため、コンパイルが通らないはず。
-
-lass Greeting {
+class Greeting {
     private val platform = getPlatform()
 
     fun greet(): String {
