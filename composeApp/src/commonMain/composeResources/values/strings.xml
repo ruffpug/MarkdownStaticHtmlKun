@@ -4,14 +4,22 @@
 
     <string name="main_window_target_directory_path_label">変換対象のドキュメントのディレクトリ:</string>
     <string name="main_window_target_directory_select_button">選択</string>
+    <string name="main_window_css_file_path_label">出力結果のHTMLに組み込まれるCSSファイル:</string>
+    <string name="main_window_css_file_path_select_button">選択</string>
+    <string name="main_window_output_directory_path_label">変換結果の出力先の親ディレクトリ:</string>
+    <string name="main_window_output_directory_path_select_button">選択</string>
     <string name="main_window_convert_button">HTMLに変換</string>
 
-    <string name="directory_picker_title">変換対象のドキュメントのディレクトリを選択</string>
+    <string name="target_directory_picker_title">変換対象のドキュメントのディレクトリを選択</string>
+    <string name="css_picker_title">組み込むCSSファイルを選択</string>
+    <string name="output_directory_picker_title">出力先の親ディレクトリを選択</string>
 
     <string name="conversion_result_message_dialog_title_success">変換成功</string>
     <string name="conversion_result_message_dialog_title_failure">変換失敗</string>
     <string name="conversion_result_message_dialog_message_success">ドキュメントの変換に成功しました。\n\n保存先:\n(%1$s)</string>
-    <string name="conversion_result_message_dialog_message_failure_invalid_directory_path_specified">指定されたディレクトリが無効です。</string>
+    <string name="conversion_result_message_dialog_message_failure_invalid_target_directory_path_specified">指定された変換対象ディレクトリが無効です。</string>
+    <string name="conversion_result_message_dialog_message_failure_css_file_not_found">指定されたCSSファイルが見つかりません。</string>
+    <string name="conversion_result_message_dialog_message_failure_invalid_output_directory_path_specified">指定された出力先ディレクトリが無効です。</string>
     <string name="conversion_result_message_dialog_message_failure_failed_to_create_html_file">ドキュメントの変換に失敗しました。\n同名のHTMLファイルが既に存在している可能性があります。\n(%1$s)</string>
     <string name="conversion_result_message_dialog_message_failure_io_exception_occurred">ファイル操作中にIOエラーが発生しました。</string>
     <string name="conversion_result_message_dialog_message_failure_security_exception_occurred">ファイル操作中にIOエラーが発生しました。\nアクセス権限を確認してください。</string>

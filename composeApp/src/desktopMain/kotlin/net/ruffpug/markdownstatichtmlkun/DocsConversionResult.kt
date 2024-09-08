@@ -24,12 +24,26 @@ internal sealed interface DocsConversionResult {
     sealed interface Failure : DocsConversionResult {
 
         /**
-         * 無効なディレクトリパスが指定された場合
+         * 無効な対象ディレクトリパスが指定された場合
          *
          * * 指定パスがディレクトリではない場合
          * * 指定パスが存在しない場合
          */
-        data object InvalidDirectoryPathSpecified : Failure
+        data object InvalidTargetDirectoryPathSpecified : Failure
+
+        /**
+         * CSSファイルが見つからない場合
+         * (本アプリの事前準備が正しく行えていない場合が該当する。)
+         */
+        data object CssFileNotFound : Failure
+
+        /**
+         * 無効な出力先ディレクトリパスが指定された場合
+         *
+         * * 指定パスがディレクトリではない場合
+         * * 指定パスが存在しない場合
+         */
+        data object InvalidOutputDirectoryPathSpecified : Failure
 
         /**
          * HTMLファイルの作成に失敗した場合

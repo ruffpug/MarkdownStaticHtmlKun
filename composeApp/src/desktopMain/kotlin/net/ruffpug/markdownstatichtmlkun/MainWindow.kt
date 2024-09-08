@@ -22,13 +22,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import co.touchlab.kermit.Logger
 import io.github.vinceglb.filekit.compose.rememberDirectoryPickerLauncher
+import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
+import io.github.vinceglb.filekit.core.PickerType
 import java.awt.Desktop
 import java.io.File
 import markdownstatichtmlkun.composeapp.generated.resources.Res
-import markdownstatichtmlkun.composeapp.generated.resources.directory_picker_title
+import markdownstatichtmlkun.composeapp.generated.resources.css_picker_title
 import markdownstatichtmlkun.composeapp.generated.resources.main_window_convert_button
+import markdownstatichtmlkun.composeapp.generated.resources.main_window_css_file_path_label
+import markdownstatichtmlkun.composeapp.generated.resources.main_window_css_file_path_select_button
+import markdownstatichtmlkun.composeapp.generated.resources.main_window_output_directory_path_label
+import markdownstatichtmlkun.composeapp.generated.resources.main_window_output_directory_path_select_button
 import markdownstatichtmlkun.composeapp.generated.resources.main_window_target_directory_path_label
 import markdownstatichtmlkun.composeapp.generated.resources.main_window_target_directory_select_button
+import markdownstatichtmlkun.composeapp.generated.resources.output_directory_picker_title
+import markdownstatichtmlkun.composeapp.generated.resources.target_directory_picker_title
 import markdownstatichtmlkun.composeapp.generated.resources.title
 import org.jetbrains.compose.resources.stringResource
 
@@ -51,15 +59,32 @@ internal fun MainWindow(
                 val isProcessing: Boolean by viewModel.isProcessing.collectAsState()
                 val isConvertButtonEnabled: Boolean by viewModel.isConvertButtonEnabled.collectAsState()
                 val targetDirectoryPath: String by viewModel.targetDirectoryPath.collectAsState()
+                val cssFilePath: String by viewModel.cssFilePath.collectAsState()
+                val outputDirectoryPath: String by viewModel.outputDirectoryPath.collectAsState()
                 var conversionResultMessageDialogState: ConversionResultMessageDialogState by remember {
                     mutableStateOf(ConversionResultMessageDialogState.NotShown)
                 }
 
-                //  ディレクトリ選択ダイアログのLauncher
-                val launcher = rememberDirectoryPickerLauncher(
-                    title = stringResource(Res.string.directory_picker_title),
+                //  対象ディレクトリ選択ダイアログのLauncher
+                val targetDirPickerLauncher = rememberDirectoryPickerLauncher(
+                    title = stringResource(Res.string.target_directory_picker_title),
                     initialDirectory = null,
-                    onResult = viewModel::onDirectorySelected,
+                    onResult = viewModel::onTargetDirectorySelected,
+                )
+
+                //  CSS選択ダイアログのLauncher
+                val cssPickerLauncher = rememberFilePickerLauncher(
+                    type = PickerType.File(listOf("css")),
+                    title = stringResource(Res.string.css_picker_title),
+                    initialDirectory = null,
+                    onResult = viewModel::onCssFileSelected,
+                )
+
+                //  出力先ディレクトリ選択ダイアログのLauncher
+                val outputDirPickerLauncher = rememberDirectoryPickerLauncher(
+                    title = stringResource(Res.string.output_directory_picker_title),
+                    initialDirectory = null,
+                    onResult = viewModel::onOutputDirectorySelected,
                 )
 
                 //  変換結果メッセージの表示要求を購読する。
@@ -70,13 +95,13 @@ internal fun MainWindow(
                     }
                 }
 
-                //  ラベル
+                //  対象ディレクトリパスラベル
                 Text(
                     text = stringResource(Res.string.main_window_target_directory_path_label),
                     modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 8.dp),
                 )
 
-                //  入力欄
+                //  対象ディレクトリパス入力欄
                 Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     //  入力フィールド
                     OutlinedTextField(
@@ -89,11 +114,65 @@ internal fun MainWindow(
 
                     //  選択ボタン
                     Button(
-                        onClick = { launcher.launch() },
+                        onClick = { targetDirPickerLauncher.launch() },
                         enabled = !isProcessing,
                         modifier = Modifier.padding(8.dp, 8.dp, 16.dp, 8.dp),
                     ) {
                         Text(text = stringResource(Res.string.main_window_target_directory_select_button))
+                    }
+                }
+
+                //  CSSファイルパスラベル
+                Text(
+                    text = stringResource(Res.string.main_window_css_file_path_label),
+                    modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 8.dp),
+                )
+
+                //  CSSファイルパス入力欄
+                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    //  入力フィールド
+                    OutlinedTextField(
+                        value = cssFilePath,
+                        onValueChange = viewModel::onCssFilePathInputChanged,
+                        enabled = !isProcessing,
+                        singleLine = true,
+                        modifier = Modifier.padding(16.dp, 8.dp, 8.dp, 16.dp).weight(1f),
+                    )
+
+                    //  選択ボタン
+                    Button(
+                        onClick = { cssPickerLauncher.launch() },
+                        enabled = !isProcessing,
+                        modifier = Modifier.padding(8.dp, 8.dp, 16.dp, 8.dp),
+                    ) {
+                        Text(text = stringResource(Res.string.main_window_css_file_path_select_button))
+                    }
+                }
+
+                //  出力先ディレクトリパスラベル
+                Text(
+                    text = stringResource(Res.string.main_window_output_directory_path_label),
+                    modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 8.dp),
+                )
+
+                //  出力先ディレクトリパス入力欄
+                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    //  入力フィールド
+                    OutlinedTextField(
+                        value = outputDirectoryPath,
+                        onValueChange = viewModel::onOutputDirectoryPathInputChanged,
+                        enabled = !isProcessing,
+                        singleLine = true,
+                        modifier = Modifier.padding(16.dp, 8.dp, 8.dp, 16.dp).weight(1f),
+                    )
+
+                    //  選択ボタン
+                    Button(
+                        onClick = { outputDirPickerLauncher.launch() },
+                        enabled = !isProcessing,
+                        modifier = Modifier.padding(8.dp, 8.dp, 16.dp, 8.dp),
+                    ) {
+                        Text(text = stringResource(Res.string.main_window_output_directory_path_select_button))
                     }
                 }
 

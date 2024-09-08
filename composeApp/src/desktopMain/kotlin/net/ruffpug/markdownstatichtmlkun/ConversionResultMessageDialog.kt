@@ -8,8 +8,10 @@ import androidx.compose.ui.window.DialogProperties
 import markdownstatichtmlkun.composeapp.generated.resources.Res
 import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_button_failure
 import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_button_success
+import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_message_failure_css_file_not_found
 import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_message_failure_failed_to_create_html_file
-import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_message_failure_invalid_directory_path_specified
+import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_message_failure_invalid_output_directory_path_specified
+import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_message_failure_invalid_target_directory_path_specified
 import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_message_failure_io_exception_occurred
 import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_message_failure_security_exception_occurred
 import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_message_success
@@ -36,8 +38,16 @@ internal fun ConversionResultMessageDialog(
             result.outputDirectoryPath,
         )
 
-        is DocsConversionResult.Failure.InvalidDirectoryPathSpecified ->
-            stringResource(Res.string.conversion_result_message_dialog_message_failure_invalid_directory_path_specified)
+        is DocsConversionResult.Failure.InvalidTargetDirectoryPathSpecified -> stringResource(
+            Res.string.conversion_result_message_dialog_message_failure_invalid_target_directory_path_specified,
+        )
+
+        is DocsConversionResult.Failure.CssFileNotFound ->
+            stringResource(Res.string.conversion_result_message_dialog_message_failure_css_file_not_found)
+
+        is DocsConversionResult.Failure.InvalidOutputDirectoryPathSpecified -> stringResource(
+            Res.string.conversion_result_message_dialog_message_failure_invalid_output_directory_path_specified,
+        )
 
         is DocsConversionResult.Failure.FailedToCreateHtmlFile -> stringResource(
             Res.string.conversion_result_message_dialog_message_failure_failed_to_create_html_file,

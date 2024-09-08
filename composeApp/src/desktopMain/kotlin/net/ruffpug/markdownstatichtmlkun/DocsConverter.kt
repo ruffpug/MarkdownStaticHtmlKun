@@ -8,5 +8,5 @@ internal interface DocsConverter {
     /**
      * Markdownドキュメントを静的HTMLのドキュメントに変換する。
      */
-    suspend fun convert(directoryPath: String): DocsConversionResult
+    suspend fun convert(targetDirPath: String, cssFilePath: String, outputDirPath: String): DocsConversionResult
 }
