@@ -10,8 +10,11 @@
 
     <string name="conversion_result_message_dialog_title_success">変換成功</string>
     <string name="conversion_result_message_dialog_title_failure">変換失敗</string>
-    <string name="conversion_result_message_dialog_message_success">ドキュメントの変換に成功しました。</string>
-    <string name="conversion_result_message_dialog_message_failure">ドキュメントの変換に失敗しました。\nTODO: 詳細情報</string>
+    <string name="conversion_result_message_dialog_message_success">ドキュメントの変換に成功しました。\n\n保存先:\n(%1$s)</string>
+    <string name="conversion_result_message_dialog_message_failure_invalid_directory_path_specified">指定されたディレクトリが無効です。</string>
+    <string name="conversion_result_message_dialog_message_failure_failed_to_create_html_file">ドキュメントの変換に失敗しました。\n同名のHTMLファイルが既に存在している可能性があります。\n(%1$s)</string>
+    <string name="conversion_result_message_dialog_message_failure_io_exception_occurred">ファイル操作中にIOエラーが発生しました。</string>
+    <string name="conversion_result_message_dialog_message_failure_security_exception_occurred">ファイル操作中にIOエラーが発生しました。\nアクセス権限を確認してください。</string>
     <string name="conversion_result_message_dialog_button_success">開く</string>
     <string name="conversion_result_message_dialog_button_failure">閉じる</string>
 </resources>

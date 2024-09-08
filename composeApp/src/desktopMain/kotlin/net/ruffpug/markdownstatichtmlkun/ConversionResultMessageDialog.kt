@@ -8,7 +8,10 @@ import androidx.compose.ui.window.DialogProperties
 import markdownstatichtmlkun.composeapp.generated.resources.Res
 import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_button_failure
 import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_button_success
-import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_message_failure
+import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_message_failure_failed_to_create_html_file
+import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_message_failure_invalid_directory_path_specified
+import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_message_failure_io_exception_occurred
+import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_message_failure_security_exception_occurred
 import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_message_success
 import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_title_failure
 import markdownstatichtmlkun.composeapp.generated.resources.conversion_result_message_dialog_title_success
@@ -28,8 +31,24 @@ internal fun ConversionResultMessageDialog(
         is DocsConversionResult.Failure -> stringResource(Res.string.conversion_result_message_dialog_title_failure)
     }
     val message: String = when (result) {
-        is DocsConversionResult.Success -> stringResource(Res.string.conversion_result_message_dialog_message_success)
-        is DocsConversionResult.Failure -> stringResource(Res.string.conversion_result_message_dialog_message_failure)
+        is DocsConversionResult.Success -> stringResource(
+            Res.string.conversion_result_message_dialog_message_success,
+            result.outputDirectoryPath,
+        )
+
+        is DocsConversionResult.Failure.InvalidDirectoryPathSpecified ->
+            stringResource(Res.string.conversion_result_message_dialog_message_failure_invalid_directory_path_specified)
+
+        is DocsConversionResult.Failure.FailedToCreateHtmlFile -> stringResource(
+            Res.string.conversion_result_message_dialog_message_failure_failed_to_create_html_file,
+            result.fileName,
+        )
+
+        is DocsConversionResult.Failure.IOExceptionOccurred ->
+            stringResource(Res.string.conversion_result_message_dialog_message_failure_io_exception_occurred)
+
+        is DocsConversionResult.Failure.SecurityExceptionOccurred ->
+            stringResource(Res.string.conversion_result_message_dialog_message_failure_security_exception_occurred)
     }
     val button: String = when (result) {
         is DocsConversionResult.Success -> stringResource(Res.string.conversion_result_message_dialog_button_success)

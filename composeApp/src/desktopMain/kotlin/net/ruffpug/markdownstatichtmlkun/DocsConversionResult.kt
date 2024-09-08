@@ -1,5 +1,7 @@
 package net.ruffpug.markdownstatichtmlkun
 
+import java.io.IOException
+
 /**
  * ドキュメントの変換結果
  */
@@ -19,11 +21,31 @@ internal sealed interface DocsConversionResult {
     /**
      * 変換失敗
      */
-    data class Failure(
+    sealed interface Failure : DocsConversionResult {
 
         /**
-         * TODO: エラー原因の定義
+         * 無効なディレクトリパスが指定された場合
+         *
+         * * 指定パスがディレクトリではない場合
+         * * 指定パスが存在しない場合
          */
-        val todoCause: Any,
-    ) : DocsConversionResult
+        data object InvalidDirectoryPathSpecified : Failure
+
+        /**
+         * HTMLファイルの作成に失敗した場合
+         *
+         * * 既に同名の .html ファイルが存在する場合
+         */
+        data class FailedToCreateHtmlFile(val fileName: String) : Failure
+
+        /**
+         * IOExceptionが発生した場合
+         */
+        data class IOExceptionOccurred(val exception: IOException) : Failure
+
+        /**
+         * SecurityExceptionが発生した場合
+         */
+        data class SecurityExceptionOccurred(val exception: SecurityException) : Failure
+    }
 }

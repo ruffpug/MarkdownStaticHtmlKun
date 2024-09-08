@@ -13,6 +13,8 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+markdown = { group = "org.jetbrains", name = "markdown", version = "0.7.3" }
+jsoup = { group = "org.jsoup", name = "jsoup", version = "1.18.1" }
 filekit-core = { group = "io.github.vinceglb", name = "filekit-core", version.ref = "filekit" }
 filekit-compose = { group = "io.github.vinceglb", name = "filekit-compose", version.ref = "filekit" }
 kermit = { group = "co.touchlab", name = "kermit", version = "2.0.4" }

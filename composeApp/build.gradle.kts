@@ -22,6 +22,8 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.markdown)
+            implementation(libs.jsoup)
             implementation(libs.filekit.core)
             implementation(libs.filekit.compose)
             implementation(libs.kermit)
