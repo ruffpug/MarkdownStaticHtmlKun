@@ -97,3 +97,19 @@ Markdownで書かれたドキュメントをHTMLファイルに変換するツ�
   * `./gradlew run`
 * 実行可能ファイル出力
   * `./gradlew package`
+* ライセンス一覧JSONファイル生成
+  * `./gradlew :composeApp:exportLibraryDefinitions -PaboutLibraries.exportPath=src/commonMain/resources`
+
+## ライセンス一覧について
+
+本アプリのライセンス画面には ↓ こちらのライブラリを利用しています。  
+https://github.com/mikepenz/AboutLibraries  
+
+> ライセンス一覧JSONファイル生成
+
+のコマンドを実行すると `composeApp/src/commonMain/resources/aboutlibraries.json` が自動生成され、それがアプリ内のライセンスダイアログでも表示されます。  
+
+NOTE: 1点注意点があります。  
+既知の問題として、一部のライブラリのライブラリ名が `${project.artifactId}` という名称で表示されることがあります。  
+これは、ライブラリ側の設定の問題らしく、暫定的に対処するには、手動で `aboutlibraries.json` の該当箇所を編集する必要があります。  
+参考: https://github.com/mikepenz/AboutLibraries/issues/998  
