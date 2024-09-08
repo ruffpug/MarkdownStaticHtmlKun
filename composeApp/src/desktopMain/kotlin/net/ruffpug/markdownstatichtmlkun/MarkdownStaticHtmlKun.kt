@@ -1,22 +1,21 @@
 package net.ruffpug.markdownstatichtmlkun
 
-import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import markdownstatichtmlkun.composeapp.generated.resources.Res
-import markdownstatichtmlkun.composeapp.generated.resources.title
-import org.jetbrains.compose.resources.stringResource
+import co.touchlab.kermit.Logger
+import co.touchlab.kermit.SystemWriter
 
 private object MarkdownStaticHtmlKun {
 
     @JvmStatic
     fun main(args: Array<String>) {
+        Logger.setLogWriters(SystemWriter())
+        Logger.i("アプリ起動")
+
+        val docsConverter = DocsConverterImpl()
+        val viewModel = MainWindowViewModel(docsConverter = docsConverter)
+
         application {
-            Window(
-                title = stringResource(Res.string.title),
-                onCloseRequest = ::exitApplication,
-            ) {
-                App()
-            }
+            MainWindow(viewModel = viewModel, onCloseRequest = ::exitApplication)
         }
     }
 }
