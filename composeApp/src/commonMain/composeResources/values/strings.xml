@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="title">Markdownドキュメントを静的HTMLに変換するくん</string>
+
+    <string name="main_window_target_directory_path_label">変換対象のドキュメントのディレクトリ:</string>
+    <string name="main_window_target_directory_select_button">選択</string>
+    <string name="main_window_convert_button">HTMLに変換</string>
+
+    <string name="directory_picker_title">変換対象のドキュメントのディレクトリを選択</string>
+
+    <string name="conversion_result_message_dialog_title_success">変換成功</string>
+    <string name="conversion_result_message_dialog_title_failure">変換失敗</string>
+    <string name="conversion_result_message_dialog_message_success">ドキュメントの変換に成功しました。</string>
+    <string name="conversion_result_message_dialog_message_failure">ドキュメントの変換に失敗しました。\nTODO: 詳細情報</string>
+    <string name="conversion_result_message_dialog_button_success">開く</string>
+    <string name="conversion_result_message_dialog_button_failure">閉じる</string>
 </resources>
