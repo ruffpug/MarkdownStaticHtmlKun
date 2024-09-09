@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.aboutLibraries)
 }
 
 kotlin {
@@ -27,6 +28,8 @@ kotlin {
             implementation(libs.filekit.core)
             implementation(libs.filekit.compose)
             implementation(libs.kermit)
+            implementation(libs.aboutLibraries.core)
+            implementation(libs.aboutLibraries.compose)
         }
 
         desktopMain.dependencies {

@@ -5,6 +5,7 @@ junit = "4.13.2"
 kotlin = "2.0.20"
 kotlinx-coroutines = "1.8.1"
 filekit = "0.8.2"
+aboutLibraries = "11.2.3"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -18,11 +19,14 @@ jsoup = { group = "org.jsoup", name = "jsoup", version = "1.18.1" }
 filekit-core = { group = "io.github.vinceglb", name = "filekit-core", version.ref = "filekit" }
 filekit-compose = { group = "io.github.vinceglb", name = "filekit-compose", version.ref = "filekit" }
 kermit = { group = "co.touchlab", name = "kermit", version = "2.0.4" }
+aboutLibraries-core = { group = "com.mikepenz", name = "aboutlibraries-core", version.ref = "aboutLibraries" }
+aboutLibraries-compose = { group = "com.mikepenz", name = "aboutlibraries-compose", version.ref = "aboutLibraries" }
 
 [plugins]
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibraries" }
 
 # NOTE: バージョン12系からLintの挙動が大きく変わるため、バージョン11系の最終バージョンに固定している。
 ktlintGradle = { id = "org.jlleitschuh.gradle.ktlint", version = "11.6.1" }

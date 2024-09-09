@@ -1,5 +1,6 @@
 package net.ruffpug.markdownstatichtmlkun
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +10,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -26,11 +28,14 @@ import io.github.vinceglb.filekit.compose.rememberFilePickerLauncher
 import io.github.vinceglb.filekit.core.PickerType
 import java.awt.Desktop
 import java.io.File
+import java.net.URI
 import markdownstatichtmlkun.composeapp.generated.resources.Res
 import markdownstatichtmlkun.composeapp.generated.resources.css_picker_title
 import markdownstatichtmlkun.composeapp.generated.resources.main_window_convert_button
 import markdownstatichtmlkun.composeapp.generated.resources.main_window_css_file_path_label
 import markdownstatichtmlkun.composeapp.generated.resources.main_window_css_file_path_select_button
+import markdownstatichtmlkun.composeapp.generated.resources.main_window_github_button
+import markdownstatichtmlkun.composeapp.generated.resources.main_window_license_button
 import markdownstatichtmlkun.composeapp.generated.resources.main_window_output_directory_path_label
 import markdownstatichtmlkun.composeapp.generated.resources.main_window_output_directory_path_select_button
 import markdownstatichtmlkun.composeapp.generated.resources.main_window_target_directory_path_label
@@ -64,6 +69,7 @@ internal fun MainWindow(
                 var conversionResultMessageDialogState: ConversionResultMessageDialogState by remember {
                     mutableStateOf(ConversionResultMessageDialogState.NotShown)
                 }
+                var isLicenseDialogShown: Boolean by remember { mutableStateOf(false) }
 
                 //  対象ディレクトリ選択ダイアログのLauncher
                 val targetDirPickerLauncher = rememberDirectoryPickerLauncher(
@@ -92,6 +98,29 @@ internal fun MainWindow(
                     viewModel.displayingConversionResultMessageRequested.collect { result: DocsConversionResult ->
                         //  変換結果メッセージダイアログを表示する。
                         conversionResultMessageDialogState = ConversionResultMessageDialogState.Shown(result = result)
+                    }
+                }
+
+                //  上部ボタン群
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End,
+                ) {
+                    //  GitHubボタン
+                    TextButton(
+                        modifier = Modifier.padding(8.dp, 8.dp, 4.dp, 8.dp),
+                        onClick = ::openGitHubPageInBrowser,
+                    ) {
+                        Text(stringResource(Res.string.main_window_github_button))
+                    }
+
+                    //  ライセンスボタン
+                    TextButton(
+                        modifier = Modifier.padding(4.dp, 8.dp, 8.dp, 8.dp),
+                        onClick = { isLicenseDialogShown = true },
+                    ) {
+                        Text(stringResource(Res.string.main_window_license_button))
                     }
                 }
 
@@ -214,6 +243,11 @@ internal fun MainWindow(
                         },
                     )
                 }
+
+                //  ライセンスダイアログ
+                if (isLicenseDialogShown) {
+                    LicenseDialog(onDismissRequest = { isLicenseDialogShown = false })
+                }
             }
         }
     }
@@ -228,5 +262,17 @@ private fun openOutputDirectory(outputDirectoryPath: String) {
         Logger.d(LOG_TAG) { "出力先表示 終了: $outputDirectoryPath" }
     } catch (e: Exception) {
         Logger.d(LOG_TAG, e) { "出力先表示 例外: $outputDirectoryPath" }
+    }
+}
+
+//  GitHubページをブラウザで表示する。
+private fun openGitHubPageInBrowser() {
+    try {
+        Logger.d(LOG_TAG) { "GitHubページ表示 開始" }
+        val url = "https://github.com/ruffpug/MarkdownStaticHtmlKun"
+        Desktop.getDesktop().browse(URI(url))
+        Logger.d(LOG_TAG) { "GitHubページ表示 終了" }
+    } catch (e: Exception) {
+        Logger.d(LOG_TAG, e) { "GitHubページ表示 例外" }
     }
 }

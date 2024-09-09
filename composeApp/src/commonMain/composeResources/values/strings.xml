@@ -2,6 +2,8 @@
 <resources>
     <string name="title">Markdownドキュメントを静的HTMLに変換するくん</string>
 
+    <string name="main_window_github_button">GitHub</string>
+    <string name="main_window_license_button">ライセンス</string>
     <string name="main_window_target_directory_path_label">変換対象のドキュメントのディレクトリ:</string>
     <string name="main_window_target_directory_select_button">選択</string>
     <string name="main_window_css_file_path_label">出力結果のHTMLに組み込まれるCSSファイル:</string>
