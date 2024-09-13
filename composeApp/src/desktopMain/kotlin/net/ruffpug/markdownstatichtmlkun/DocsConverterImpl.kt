@@ -3,6 +3,7 @@ package net.ruffpug.markdownstatichtmlkun
 import co.touchlab.kermit.Logger
 import java.io.File
 import java.io.IOException
+import java.net.URLDecoder
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
@@ -93,7 +94,7 @@ internal class DocsConverterImpl(
             //  指定された出力先ディレクトリが無効である場合
             if (!isValidOutputDirSpecified) {
                 Logger.d(LOG_TAG) { "出力先ディレクトリ有効判定 無効" }
-                return DocsConversionResult.Failure.InvalidTargetDirectoryPathSpecified
+                return DocsConversionResult.Failure.InvalidOutputDirectoryPathSpecified
             }
 
             //  出力先ディレクトリ内に一時フォルダを作成する。
@@ -111,7 +112,7 @@ internal class DocsConverterImpl(
             val targetMarkdownFiles = LinkedList<File>()
             Files.walk(tempDir.toPath()).use { stream: Stream<Path> ->
                 for (path: Path in stream) {
-                    val file: File = path.toFile()
+                    val file: File = path.toFile().canonicalFile
                     val isMarkdownFile: Boolean = file.isFile && file.extension.equals("md", ignoreCase = true)
 
                     //  Markdownファイルである場合
@@ -162,29 +163,31 @@ internal class DocsConverterImpl(
                         continue
                     }
 
-                    //  href属性が含まれている場合、そのリンク (相対位置) を絶対パスに変換する。
+                    //  href属性が含まれている場合、そのリンクの相対リンクを解決する。
+                    //  (URLエンコードされている可能性も考慮して、URLデコードを掛けた場合のものも求めておく。)
                     val hrefAttr: Attribute = aTag.attribute("href")
                     val link: String = hrefAttr.value
-                    val resolvedLink: File = markdownFile.parentFile.resolve(link).canonicalFile
-                    Logger.d(LOG_TAG) { "Markdown変換 aタグ補正 リンク解決結果: $markdownFile, $link, $resolvedLink" }
+                    val decodedLink: String = URLDecoder.decode(link, Charsets.UTF_8)
+                    val resolved1: File = markdownFile.parentFile.resolve(link).canonicalFile
+                    val resolved2: File = markdownFile.parentFile.resolve(decodedLink).canonicalFile
+                    Logger.d(LOG_TAG) { "Markdown変換 aタグ補正 リンク解決結果: $markdownFile, $link, $resolved1, $resolved2" }
 
-                    //  変換されたリンクに該当するMarkdownファイルを探索する。
+                    //  解決されたリンクに該当するMarkdownファイルを探索する。
+                    //  NOTE: そのままのリンク・URLデコードされたリンクのどちらか片方にでもヒットした場合、そのリンクはそのファイルを指しているとみなす。
                     val linkedMarkdownFile: File? =
-                        targetMarkdownFiles.firstOrNull { f -> f.absolutePath == resolvedLink.absolutePath }
+                        targetMarkdownFiles.firstOrNull { file: File -> file == resolved1 || file == resolved2 }
                     Logger.d(LOG_TAG) { "Markdown変換 aタグ補正 探索結果: $markdownFile, $linkedMarkdownFile" }
 
-                    //  リンクされているMarkdownファイルが見つからなかった場合
+                    //  リンクされているMarkdownファイルが見つからなかった場合、手を加えない。
                     if (linkedMarkdownFile == null) {
                         Logger.d(LOG_TAG) { "Markdown変換 aタグ補正 終了 (探索ヒットなし): $markdownFile, $link" }
                         continue
                     }
 
-                    //  リンクされているMarkdownファイルが見つかった場合、拡張子をhtmlに更新した相対パスをhref属性に設定する。
-                    val linkedMarkdownHtmlFile =
-                        File(linkedMarkdownFile.parentFile, "${linkedMarkdownFile.nameWithoutExtension}.html")
-                    val correctedRelativePath: String = linkedMarkdownHtmlFile.toRelativeString(markdownFile.parentFile)
-                    hrefAttr.setValue(correctedRelativePath)
-                    Logger.d(LOG_TAG) { "Markdown変換 aタグ補正 終了 (探索ヒットあり): $markdownFile, $correctedRelativePath" }
+                    //  リンクされているMarkdownファイルが見つかった場合、そのリンクの拡張子 .md を .html に置換してhref属性を更新する。
+                    val correctedLink: String = link.dropLast(n = ".md".length) + ".html"
+                    hrefAttr.setValue(correctedLink)
+                    Logger.d(LOG_TAG) { "Markdown変換 aタグ補正 終了 (探索ヒットあり): $markdownFile, $link, $correctedLink" }
                 }
 
                 //  bodyタグにクラス名を付与する。
@@ -206,7 +209,7 @@ internal class DocsConverterImpl(
                 if (!isNewlyCreated) {
                     Logger.d(LOG_TAG) { "Markdown変換 補正後HTML作成 新規作成失敗: $markdownFile" }
                     return DocsConversionResult.Failure.FailedToCreateHtmlFile(
-                        fileName = markdownFile.toRelativeString(tempDir),
+                        fileName = markdownFile.toRelativeString(tempDir.canonicalFile),
                     )
                 }
 
