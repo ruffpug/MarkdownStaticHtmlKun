@@ -113,3 +113,9 @@ NOTE: 1点注意点があります。
 既知の問題として、一部のライブラリのライブラリ名が `${project.artifactId}` という名称で表示されることがあります。  
 これは、ライブラリ側の設定の問題らしく、暫定的に対処するには、手動で `aboutlibraries.json` の該当箇所を編集する必要があります。  
 参考: https://github.com/mikepenz/AboutLibraries/issues/998  
+
+## 動作デモ
+
+↓ 動作の様子です。  
+
+![動作デモ](demo.gif)
