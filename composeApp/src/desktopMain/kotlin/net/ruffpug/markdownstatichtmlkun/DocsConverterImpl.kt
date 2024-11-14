@@ -30,6 +30,9 @@ internal class DocsConverterImpl(
     companion object {
         private const val LOG_TAG: String = "DocsConverterImpl"
 
+        //  文字セットのmetaタグのHTML文字列
+        private const val CHARSET_META_TAG: String = """<meta charset="utf-8">"""
+
         //  Viewport設定を行うmetaタグのHTML文字列
         private const val VIEWPORT_META_TAG: String =
             """<meta name="viewport" content="width=device-width, initial-scale=1">"""
@@ -192,6 +195,9 @@ internal class DocsConverterImpl(
 
                 //  bodyタグにクラス名を付与する。
                 document.body().addClass(BODY_CLASS_NAME)
+
+                //  文字セットの設定を追加する。
+                document.head().append(CHARSET_META_TAG)
 
                 //  Viewportの設定を追加する。
                 document.head().append(VIEWPORT_META_TAG)
